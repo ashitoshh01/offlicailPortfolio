@@ -297,7 +297,7 @@ export const DATA = {
       title: "AI Visual Inspection SaaS",
       subtitle: "Manufacturing Quality Inspection",
       liveUrl: "",
-      githubUrl: "",
+      githubUrl: "https://github.com/Suveer-Upasani/MindForge",
       href: "",
       dates: "2025",
       active: true,
@@ -311,7 +311,13 @@ export const DATA = {
         "PaDiM",
         "Groq API",
       ],
-      links: [],
+      links: [
+        {
+          type: "Source",
+          href: "https://github.com/Suveer-Upasani/MindForge",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
       image: "/projects/ai-inspection.jpg",
       video: "",
     },

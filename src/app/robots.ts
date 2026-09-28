@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
+import { DATA } from "@/data/resume";
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = DATA.url.replace(/\/$/, "");
   return {
     rules: [
       {
@@ -8,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://ashitoshlavhate.site/sitemap.xml",
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

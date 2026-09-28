@@ -34,7 +34,7 @@ import { Opencv } from "@/components/ui/svgs/opencv";
 export const DATA = {
   name: "Ashitosh Lavhate",
   initials: "AL",
-  url: "https://ashitoshlavhate.site",
+  url: "https://www.ashitoshlavhate.site",
   location: "Pune, Maharashtra, India",
   locationLink: "https://www.google.com/maps/place/Pune,+Maharashtra",
   headline: "Computer Science Undergraduate — Software Engineer",

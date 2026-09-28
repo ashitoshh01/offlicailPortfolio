@@ -235,7 +235,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/reachfirst.jpg",
+      image: "/projects/reachfirst.png",
       video: "",
     },
     {
@@ -263,7 +263,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/flowlens.jpg",
+      image: "/projects/flowlens.png",
       video: "",
     },
     {
@@ -290,7 +290,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/doordue.jpg",
+      image: "/projects/doordue.png",
       video: "",
     },
     {
@@ -318,7 +318,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/ai-inspection.jpg",
+      image: "/projects/ai-inspection.png",
       video: "",
     },
   ],

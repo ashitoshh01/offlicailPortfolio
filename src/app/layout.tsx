@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
@@ -20,25 +20,56 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
   title: {
-    default: `${DATA.name} — Software Engineer`,
+    default: `${DATA.name} — Full-Stack Developer & Computer Science Engineer`,
     template: `%s | ${DATA.name}`,
   },
-  description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.`,
+  description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, developer tools, and practical software products.`,
+  keywords: [
+    "Ashitosh Lavhate",
+    "Full-Stack Developer",
+    "Software Engineer",
+    "Computer Science Engineer",
+    "Next.js Developer",
+    "Backend Developer",
+    "React Developer",
+    "TypeScript",
+    "Pune Developer",
+    "Portfolio",
+  ],
   authors: [{ name: DATA.name, url: DATA.url }],
   creator: DATA.name,
+  publisher: DATA.name,
+  applicationName: `${DATA.name} Portfolio`,
   alternates: {
     canonical: DATA.url,
   },
   openGraph: {
-    title: `${DATA.name} — Software Engineer`,
-    description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.`,
+    title: `${DATA.name} — Full-Stack Developer & Computer Science Engineer`,
+    description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, developer tools, and practical software products.`,
     url: DATA.url,
     siteName: DATA.name,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: `${DATA.url}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: `${DATA.name} — Full-Stack Developer & Computer Science Engineer`,
+      },
+    ],
   },
   robots: {
     index: true,
@@ -52,9 +83,10 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name} — Software Engineer`,
-    description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.`,
     card: "summary_large_image",
+    title: `${DATA.name} — Full-Stack Developer & Computer Science Engineer`,
+    description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, developer tools, and practical software products.`,
+    images: [`${DATA.url}/opengraph-image`],
   },
   manifest: "/manifest.webmanifest",
   icons: {
@@ -76,8 +108,7 @@ export const metadata: Metadata = {
     title: DATA.name,
   },
   verification: {
-    google: "",
-    yandex: "",
+    google: "4e244e8becd0e9c7",
   },
 };
 
@@ -86,27 +117,56 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const knowsAbout = DATA.skills.flatMap((group) =>
+    group.skills.map((s) => s.name)
+  );
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Person",
-    name: DATA.name,
-    url: DATA.url,
-    jobTitle: "Software Engineer",
-    description:
-      "Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Pune",
-      addressRegion: "Maharashtra",
-      addressCountry: "India",
-    },
-    alumniOf: {
-      "@type": "EducationalOrganization",
-      name: "DES Pune University",
-    },
-    sameAs: [
-      DATA.contact.social.GitHub.url,
-      DATA.contact.social.LinkedIn.url,
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${DATA.url}/#website`,
+        name: `${DATA.name} — Portfolio`,
+        url: DATA.url,
+        description: DATA.description,
+        publisher: {
+          "@id": `${DATA.url}/#person`,
+        },
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "Person",
+        "@id": `${DATA.url}/#person`,
+        name: DATA.name,
+        url: DATA.url,
+        image: `${DATA.url}${DATA.avatarUrl}`,
+        jobTitle: "Software Engineer",
+        description: DATA.description,
+        email: `mailto:${DATA.contact.email}`,
+        telephone: DATA.contact.tel,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Pune",
+          addressRegion: "Maharashtra",
+          addressCountry: "India",
+        },
+        alumniOf: DATA.education.map((edu) => ({
+          "@type": "EducationalOrganization",
+          name: edu.school,
+          ...(edu.href ? { url: edu.href } : {}),
+        })),
+        sameAs: [
+          DATA.contact.social.GitHub.url,
+          DATA.contact.social.LinkedIn.url,
+        ],
+        knowsAbout: [
+          "Computer Science",
+          "Software Engineering",
+          "Full-Stack Development",
+          ...knowsAbout,
+        ],
+      },
     ],
   };
 

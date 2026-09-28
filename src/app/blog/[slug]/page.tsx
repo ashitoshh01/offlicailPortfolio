@@ -37,37 +37,45 @@ export async function generateMetadata({
     return undefined;
   }
 
-  let {
+  const {
     title,
     publishedAt: publishedTime,
     summary: description,
     image,
   } = post;
 
+  const postUrl = `${DATA.url}/blog/${slug}`;
+  const ogImageUrl = image
+    ? (image.startsWith("http") ? image : `${DATA.url}${image}`)
+    : `${DATA.url}/blog/${slug}/opengraph-image`;
+
   return {
     title,
     description,
+    authors: [{ name: DATA.name, url: DATA.url }],
+    alternates: {
+      canonical: postUrl,
+    },
     openGraph: {
       title,
       description,
       type: "article",
       publishedTime,
-      url: `${DATA.url}/blog/${slug}`,
-      ...(image && {
-        images: [
-          {
-            url: `${DATA.url}${image}`,
-          },
-        ],
-      }),
+      url: postUrl,
+      siteName: DATA.name,
+      locale: "en_US",
+      images: [
+        {
+          url: ogImageUrl,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(image && {
-        images: [`${DATA.url}${image}`],
-      }),
+      images: [ogImageUrl],
     },
   };
 }
@@ -96,6 +104,11 @@ export default async function Blog({
   const getSlug = (post: (typeof sortedPosts)[0]) =>
     post._meta.path.replace(/\.mdx$/, "");
 
+  const postUrl = `${DATA.url}/blog/${slug}`;
+  const postImage = post.image
+    ? (post.image.startsWith("http") ? post.image : `${DATA.url}${post.image}`)
+    : `${DATA.url}/blog/${slug}/opengraph-image`;
+
   const jsonLdContent = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -103,13 +116,21 @@ export default async function Blog({
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     description: post.summary,
-    image: post.image
-      ? `${DATA.url}${post.image}`
-      : `${DATA.url}/blog/${slug}/opengraph-image`,
-    url: `${DATA.url}/blog/${slug}`,
+    image: postImage,
+    url: postUrl,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
     author: {
       "@type": "Person",
       name: DATA.name,
+      url: DATA.url,
+    },
+    publisher: {
+      "@type": "Person",
+      name: DATA.name,
+      url: DATA.url,
     },
   }).replace(/</g, "\\u003c");
 

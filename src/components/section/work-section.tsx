@@ -17,7 +17,10 @@ function LogoImage({ src, alt }: { src: string; alt: string }) {
   return (
     <img
       src={src}
-      alt={alt}
+      alt={`${alt} logo`}
+      width={40}
+      height={40}
+      loading="lazy"
       className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none bg-white"
       onError={() => setImageError(true)}
     />
@@ -39,9 +42,9 @@ export default function WorkSection() {
               <div className="flex items-center gap-x-3 flex-1 min-w-0">
                 <LogoImage src={work.logoUrl} alt={work.company} />
                 <div className="flex-1 min-w-0 gap-0.5 flex flex-col">
-                  <div className="font-semibold leading-none flex items-center gap-2">
+                  <h3 className="font-semibold leading-none flex items-center gap-2 text-base">
                     {work.company}
-                  </div>
+                  </h3>
                   <div className="font-sans text-sm text-muted-foreground">
                     {work.title}
                   </div>

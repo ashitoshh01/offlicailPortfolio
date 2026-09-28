@@ -4,18 +4,26 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { paginate, normalizePage } from "@/lib/pagination";
 import { ChevronRight } from "lucide-react";
+import { DATA } from "@/data/resume";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Thoughts on software development, life, and more.",
+  description: "Articles and thoughts on software engineering, web development, architecture, and technology.",
+  alternates: {
+    canonical: `${DATA.url}/blog`,
+  },
   openGraph: {
-    title: "Blog",
-    description: "Thoughts on software development, life, and more.",
+    title: `Blog | ${DATA.name}`,
+    description: "Articles and thoughts on software engineering, web development, architecture, and technology.",
+    url: `${DATA.url}/blog`,
+    type: "website",
+    siteName: DATA.name,
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog",
-    description: "Thoughts on software development, life, and more.",
+    title: `Blog | ${DATA.name}`,
+    description: "Articles and thoughts on software engineering, web development, architecture, and technology.",
   },
 };
 

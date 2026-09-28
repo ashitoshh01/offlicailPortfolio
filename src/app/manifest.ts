@@ -3,7 +3,7 @@ import { DATA } from "@/data/resume";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${DATA.name} — Software Engineer`,
+    name: `${DATA.name} — Full-Stack Developer & Computer Science Engineer`,
     short_name: DATA.name.split(" ")[0],
     description: DATA.description,
     start_url: "/",

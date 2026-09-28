@@ -13,6 +13,7 @@ export function ModeToggle({ className }: { className?: string }) {
       type="button"
       variant="link"
       size="icon"
+      aria-label="Toggle theme"
       className={cn(className)}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >

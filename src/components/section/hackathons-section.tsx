@@ -7,7 +7,7 @@ import { Trophy } from "lucide-react";
 
 export default function HackathonsSection() {
   return (
-    <section id="achievements" className="overflow-hidden">
+    <div className="overflow-hidden">
       <div className="flex min-h-0 flex-col gap-y-8 w-full">
         <div className="flex flex-col gap-y-4 items-center justify-center">
           <div className="flex items-center w-full">
@@ -31,7 +31,10 @@ export default function HackathonsSection() {
                 {hackathon.image ? (
                   <img
                     src={hackathon.image}
-                    alt={hackathon.title}
+                    alt={`${hackathon.title} logo`}
+                    width={40}
+                    height={40}
+                    loading="lazy"
                     className="size-10 bg-card z-10 shrink-0 overflow-hidden p-1.5 border rounded-full shadow ring-2 ring-border object-contain flex-none"
                   />
                 ) : (
@@ -82,6 +85,6 @@ export default function HackathonsSection() {
           ))}
         </Timeline>
       </div>
-    </section>
+    </div>
   );
 }

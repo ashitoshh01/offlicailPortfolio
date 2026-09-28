@@ -21,18 +21,23 @@ export default function Page() {
         <div className="mx-auto w-full space-y-8">
           <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
             <div className="gap-2.5 flex flex-col order-2 md:order-1">
+              <h1 className="flex flex-col gap-2.5">
+                <BlurFadeText
+                  as="span"
+                  delay={BLUR_FADE_DELAY}
+                  className="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
+                  yOffset={8}
+                  text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
+                />
+                <BlurFadeText
+                  as="span"
+                  delay={BLUR_FADE_DELAY * 1.5}
+                  className="text-base sm:text-lg lg:text-xl font-medium text-foreground/90 tracking-tight"
+                  text={DATA.headline}
+                />
+              </h1>
               <BlurFadeText
-                delay={BLUR_FADE_DELAY}
-                className="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
-                yOffset={8}
-                text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
-              />
-              <BlurFadeText
-                delay={BLUR_FADE_DELAY * 1.5}
-                className="text-base sm:text-lg lg:text-xl font-medium text-foreground/90 tracking-tight"
-                text={DATA.headline}
-              />
-              <BlurFadeText
+                as="p"
                 className="text-muted-foreground max-w-[660px] text-sm md:text-base leading-relaxed"
                 delay={BLUR_FADE_DELAY * 2}
                 text={DATA.description}
@@ -40,7 +45,7 @@ export default function Page() {
             </div>
             <BlurFade delay={BLUR_FADE_DELAY} className="order-1 md:order-2">
               <Avatar className="size-24 md:size-32 border rounded-full shadow-lg ring-4 ring-muted">
-                <AvatarImage alt={DATA.name} src={DATA.avatarUrl} className="object-cover" />
+                <AvatarImage alt={`Portrait of ${DATA.name}`} src={DATA.avatarUrl} className="object-cover" />
                 <AvatarFallback className="text-xl md:text-2xl font-bold bg-muted text-foreground">
                   {DATA.initials}
                 </AvatarFallback>
@@ -87,7 +92,10 @@ export default function Page() {
                     {education.logoUrl ? (
                       <img
                         src={education.logoUrl}
-                        alt={education.school}
+                        alt={`${education.school} logo`}
+                        width={40}
+                        height={40}
+                        loading="lazy"
                         className="size-8 md:size-10 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
                       />
                     ) : (
@@ -137,6 +145,7 @@ export default function Page() {
                       href={education.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`Visit ${education.school} website`}
                       className="flex items-start gap-x-3 justify-between group"
                     >
                       {content}
@@ -172,6 +181,9 @@ export default function Page() {
           <ContactSection />
         </BlurFade>
       </section>
+      <footer className="text-center text-xs text-muted-foreground pt-4 pb-12 sm:pb-8">
+        <p>&copy; {new Date().getFullYear()} {DATA.name}. All rights reserved.</p>
+      </footer>
     </main>
   );
 }

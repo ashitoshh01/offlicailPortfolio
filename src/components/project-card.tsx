@@ -18,7 +18,10 @@ function ProjectImage({ src, alt }: { src: string; alt: string }) {
   return (
     <img
       src={src}
-      alt={alt}
+      alt={`Screenshot of ${alt}`}
+      width={600}
+      height={300}
+      loading="lazy"
       className="w-full h-48 object-cover"
       onError={() => setImageError(true)}
     />
@@ -79,6 +82,7 @@ export function ProjectCard({
             href={effectiveHref}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`View project details for ${title}`}
             className="block"
           >
             {video ? (
@@ -122,6 +126,7 @@ export function ProjectCard({
                 key={idx}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`${link.type} for ${title}`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <Badge

@@ -130,12 +130,6 @@ export const DATA = {
         icon: Icons.linkedin,
         navbar: true,
       },
-      email: {
-        name: "Send Email",
-        url: "mailto:ashitoshlavhate2@gmail.com",
-        icon: Icons.email,
-        navbar: true,
-      },
     },
   },
 

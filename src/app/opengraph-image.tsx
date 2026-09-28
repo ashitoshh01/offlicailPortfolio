@@ -4,7 +4,7 @@ import { DATA } from "@/data/resume";
 
 export const runtime = "edge";
 
-export const alt = `${DATA.name} — Full Stack Developer & AI Enthusiast`;
+export const alt = `${DATA.name} — Software Engineer`;
 export const size = {
     width: 1200,
     height: 630,
@@ -124,6 +124,16 @@ export default async function Image() {
                             )}
                             <div style={styles.mainContainer}>
                                 <div style={styles.title}>{DATA.name}</div>
+                                <div
+                                    style={{
+                                        fontSize: "26px",
+                                        fontWeight: "600",
+                                        color: "#2563eb",
+                                        marginBottom: "12px",
+                                    }}
+                                >
+                                    {DATA.headline}
+                                </div>
                                 {DATA.description && (
                                     <div style={styles.description}>{DATA.description}</div>
                                 )}

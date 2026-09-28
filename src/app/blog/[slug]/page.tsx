@@ -151,7 +151,7 @@ export default async function Blog({
         <MDXContent code={post.mdx} components={mdxComponents} />
       </article>
 
-      <nav className="mt-12 pt-8 max-w-2xl">
+      <nav className="mt-12 pt-8 w-full">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           {previousPost ? (
             <Link

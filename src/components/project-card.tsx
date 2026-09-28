@@ -27,7 +27,10 @@ function ProjectImage({ src, alt }: { src: string; alt: string }) {
 
 interface Props {
   title: string;
+  subtitle?: string;
   href?: string;
+  liveUrl?: string;
+  githubUrl?: string;
   description: string;
   dates: string;
   tags: readonly string[];
@@ -35,7 +38,7 @@ interface Props {
   image?: string;
   video?: string;
   links?: readonly {
-    icon: React.ReactNode;
+    icon?: React.ReactNode;
     type: string;
     href: string;
   }[];
@@ -44,45 +47,73 @@ interface Props {
 
 export function ProjectCard({
   title,
+  subtitle,
   href,
+  liveUrl,
+  githubUrl,
   description,
   dates,
   tags,
-  link,
   image,
   video,
   links,
   className,
 }: Props) {
+  const effectiveLiveUrl =
+    liveUrl && liveUrl.trim().length > 0 && liveUrl !== "#" ? liveUrl : "";
+  const effectiveHref =
+    effectiveLiveUrl || (href && href.trim().length > 0 && href !== "#" ? href : "");
+  const hasValidHref = Boolean(effectiveHref);
+
   return (
     <div
       className={cn(
-        "flex flex-col h-full border border-border rounded-xl overflow-hidden hover:ring-2 cursor-pointer hover:ring-muted transition-all duration-200",
+        "flex flex-col h-full border border-border rounded-xl overflow-hidden hover:ring-2 hover:ring-muted transition-all duration-200",
+        hasValidHref && "cursor-pointer",
         className
       )}
     >
       <div className="relative shrink-0">
-        <Link
-          href={href || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          {video ? (
-            <video
-              src={video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-48 object-cover"
-            />
-          ) : image ? (
-            <ProjectImage src={image} alt={title} />
-          ) : (
-            <div className="w-full h-48 bg-muted" />
-          )}
-        </Link>
+        {hasValidHref ? (
+          <Link
+            href={effectiveHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block"
+          >
+            {video ? (
+              <video
+                src={video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-48 object-cover"
+              />
+            ) : image ? (
+              <ProjectImage src={image} alt={title} />
+            ) : (
+              <div className="w-full h-48 bg-muted" />
+            )}
+          </Link>
+        ) : (
+          <div className="block">
+            {video ? (
+              <video
+                src={video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-48 object-cover"
+              />
+            ) : image ? (
+              <ProjectImage src={image} alt={title} />
+            ) : (
+              <div className="w-full h-48 bg-muted" />
+            )}
+          </div>
+        )}
         {links && links.length > 0 && (
           <div className="absolute top-2 right-2 flex flex-wrap gap-2">
             {links.map((link, idx) => (
@@ -94,11 +125,20 @@ export function ProjectCard({
                 onClick={(e) => e.stopPropagation()}
               >
                 <Badge
-                  className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
+                  className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90 shadow-sm"
                   variant="default"
                 >
-                  {link.icon}
-                  {link.type}
+                  {link.type === "Live" ? (
+                    <>
+                      <span>Live</span>
+                      <ArrowUpRight className="size-3" />
+                    </>
+                  ) : (
+                    <>
+                      {link.icon}
+                      <span>{link.type}</span>
+                    </>
+                  )}
                 </Badge>
               </Link>
             ))}
@@ -108,24 +148,33 @@ export function ProjectCard({
       <div className="p-6 flex flex-col gap-3 flex-1">
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col gap-1">
-            <h3 className="font-semibold">{title}</h3>
-            <time className="text-xs text-muted-foreground">{dates}</time>
+            <h3 className="font-semibold text-base leading-snug">{title}</h3>
+            {subtitle && (
+              <p className="text-xs font-medium text-muted-foreground">
+                {subtitle}
+              </p>
+            )}
+            {dates && (
+              <time className="text-xs text-muted-foreground/70">{dates}</time>
+            )}
           </div>
-          <Link
-            href={href || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-            aria-label={`Open ${title}`}
-          >
-            <ArrowUpRight className="h-4 w-4" aria-hidden />
-          </Link>
+          {hasValidHref && (
+            <Link
+              href={effectiveHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+              aria-label={`Open ${title}`}
+            >
+              <ArrowUpRight className="h-4 w-4" aria-hidden />
+            </Link>
+          )}
         </div>
         <div className="text-xs flex-1 prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
           <Markdown>{description}</Markdown>
         </div>
         {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-auto">
+          <div className="flex flex-wrap gap-1 mt-auto pt-2">
             {tags.map((tag) => (
               <Badge
                 key={tag}

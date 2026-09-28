@@ -23,15 +23,20 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
   title: {
-    default: `${DATA.name} — Full Stack Developer & AI Enthusiast`,
+    default: `${DATA.name} — Software Engineer`,
     template: `%s | ${DATA.name}`,
   },
-  description: `${DATA.name} is a Computer Science undergraduate based in Pune, India, building AI-powered applications, scalable backend systems, and full-stack products.`,
+  description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.`,
+  authors: [{ name: DATA.name, url: DATA.url }],
+  creator: DATA.name,
+  alternates: {
+    canonical: DATA.url,
+  },
   openGraph: {
-    title: `${DATA.name} — Full Stack Developer & AI Enthusiast`,
-    description: `${DATA.name} is a Computer Science undergraduate building AI-powered applications, scalable backend systems, and full-stack products.`,
+    title: `${DATA.name} — Software Engineer`,
+    description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.`,
     url: DATA.url,
-    siteName: `${DATA.name}`,
+    siteName: DATA.name,
     locale: "en_US",
     type: "website",
   },
@@ -47,9 +52,28 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name} — Full Stack Developer & AI Enthusiast`,
-    description: `${DATA.name} is a Computer Science undergraduate building AI-powered applications, scalable backend systems, and full-stack products.`,
+    title: `${DATA.name} — Software Engineer`,
+    description: `${DATA.name} is a Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.`,
     card: "summary_large_image",
+  },
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: DATA.name,
   },
   verification: {
     google: "",
@@ -62,8 +86,41 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: DATA.name,
+    url: DATA.url,
+    jobTitle: "Software Engineer",
+    description:
+      "Computer Science undergraduate and software engineer building full-stack applications, backend systems, AI-powered applications, and developer tools.",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Pune",
+      addressRegion: "Maharashtra",
+      addressCountry: "India",
+    },
+    alumniOf: {
+      "@type": "EducationalOrganization",
+      name: "DES Pune University",
+    },
+    sameAs: [
+      DATA.contact.social.GitHub.url,
+      DATA.contact.social.LinkedIn.url,
+    ],
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased relative",
@@ -84,7 +141,7 @@ export default function RootLayout({
                 }}
               />
             </div>
-            <div className="relative z-10 max-w-2xl mx-auto py-12 pb-24 sm:py-24 px-6">
+            <div className="relative z-10 max-w-3xl mx-auto py-12 pb-24 sm:py-24 px-6">
               {children}
             </div>
             <Navbar />

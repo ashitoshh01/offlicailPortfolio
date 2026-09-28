@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Download, ExternalLink, FileText, Eye, CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ResumeDialogProps {
   children?: React.ReactNode;
@@ -26,6 +28,7 @@ export function ResumeDialog({
   const [internalOpen, setInternalOpen] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
+  const [activePage, setActivePage] = useState<"all" | "1" | "2">("all");
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
@@ -48,7 +51,7 @@ export function ResumeDialog({
             <div>
               <DialogTitle className="text-xl font-bold">Ashitosh Lavhate — Resume</DialogTitle>
               <DialogDescription className="text-xs sm:text-sm text-muted-foreground">
-                Computer Science Undergraduate • Applied AI, Backend Systems & Automation
+                Computer Science Undergraduate — Software Engineer • 2 Pages
               </DialogDescription>
             </div>
           </div>
@@ -56,7 +59,7 @@ export function ResumeDialog({
 
         {/* Action Controls */}
         <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1 pb-3 border-b">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <a
               href="/resume.pdf"
               download="Ashitosh_Lavhate_Resume.pdf"
@@ -86,6 +89,47 @@ export function ResumeDialog({
               <Eye className="size-4" />
               {showPreview ? "Hide Preview" : "Preview Resume"}
             </Button>
+
+            {showPreview && (
+              <div className="flex items-center gap-1 bg-muted/70 p-0.5 rounded-lg text-xs border">
+                <button
+                  type="button"
+                  onClick={() => setActivePage("all")}
+                  className={cn(
+                    "px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer",
+                    activePage === "all"
+                      ? "bg-background text-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  All (2 Pages)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActivePage("1")}
+                  className={cn(
+                    "px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer",
+                    activePage === "1"
+                      ? "bg-background text-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Page 1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActivePage("2")}
+                  className={cn(
+                    "px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer",
+                    activePage === "2"
+                      ? "bg-background text-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Page 2
+                </button>
+              </div>
+            )}
           </div>
 
           <a
@@ -102,13 +146,45 @@ export function ResumeDialog({
 
         {/* Preview Area */}
         {showPreview ? (
-          <div className="relative flex-1 min-h-[50vh] sm:min-h-[64vh] max-h-[68vh] w-full rounded-xl overflow-y-auto border bg-neutral-100 dark:bg-neutral-900 p-2 sm:p-4 mt-2 shadow-inner">
-            <div className="max-w-[760px] mx-auto bg-white rounded-lg shadow-lg border border-neutral-200 overflow-hidden">
-              <img
-                src="/resume-page-1.png"
-                alt="Ashitosh Lavhate Resume"
-                className="w-full h-auto block select-none"
-              />
+          <div className="relative flex-1 min-h-0 max-h-[70vh] w-full rounded-xl overflow-y-auto border bg-neutral-100 dark:bg-neutral-900/60 p-2 sm:p-4 mt-2 shadow-inner">
+            <div className="max-w-[760px] mx-auto space-y-6">
+              {(activePage === "all" || activePage === "1") && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between px-1 text-xs font-medium text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <span className="inline-block size-2 rounded-full bg-primary" />
+                      Page 1 of 2
+                    </span>
+                    <span className="text-[11px] text-muted-foreground/80">Experience & Projects</span>
+                  </div>
+                  <div className="bg-white rounded-lg shadow-md border border-neutral-200 overflow-hidden">
+                    <img
+                      src="/resume-page-1.png"
+                      alt="Ashitosh Lavhate Resume - Page 1"
+                      className="w-full h-auto block select-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {(activePage === "all" || activePage === "2") && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between px-1 text-xs font-medium text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <span className="inline-block size-2 rounded-full bg-primary" />
+                      Page 2 of 2
+                    </span>
+                    <span className="text-[11px] text-muted-foreground/80">Achievements & Leadership</span>
+                  </div>
+                  <div className="bg-white rounded-lg shadow-md border border-neutral-200 overflow-hidden">
+                    <img
+                      src="/resume-page-2.png"
+                      alt="Ashitosh Lavhate Resume - Page 2"
+                      className="w-full h-auto block select-none"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -119,7 +195,7 @@ export function ResumeDialog({
             <div className="space-y-1">
               <h3 className="font-semibold text-base">Resume Ready for Download</h3>
               <p className="text-sm text-muted-foreground max-w-sm">
-                Save the resume to your system or toggle preview to view the complete document right here.
+                Save the resume to your system or toggle preview to view both pages right here.
               </p>
             </div>
             <div className="flex items-center gap-3 pt-2">
@@ -130,7 +206,7 @@ export function ResumeDialog({
               >
                 <Button className="gap-2 cursor-pointer">
                   <Download className="size-4" />
-                  Download Resume
+                  Download Resume (PDF)
                 </Button>
               </a>
               <Button variant="outline" onClick={() => setShowPreview(true)} className="gap-2 cursor-pointer">

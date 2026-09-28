@@ -7,20 +7,20 @@ import { Trophy } from "lucide-react";
 
 export default function HackathonsSection() {
   return (
-    <section id="hackathons" className="overflow-hidden">
+    <section id="achievements" className="overflow-hidden">
       <div className="flex min-h-0 flex-col gap-y-8 w-full">
         <div className="flex flex-col gap-y-4 items-center justify-center">
           <div className="flex items-center w-full">
             <div className="flex-1 h-px bg-linear-to-r from-transparent from-5% via-border via-95% to-transparent" />
             <div className="border bg-primary z-10 rounded-xl px-4 py-1">
-              <span className="text-background text-sm font-medium">Achievements</span>
+              <span className="text-background text-sm font-medium">Achievements & Leadership</span>
             </div>
             <div className="flex-1 h-px bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent" />
           </div>
-          <div className="flex flex-col gap-y-3 items-center justify-center">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Hackathons & Competitions</h2>
+          <div className="flex flex-col gap-y-3 items-center justify-center text-center">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Achievements & Leadership</h2>
             <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center max-w-xl">
-              Building rapid prototypes and solving challenging technical problems in fast-paced competitive environments across national and university hackathons.
+              Recognized for technical excellence, rapid prototyping, and developer community leadership.
             </p>
           </div>
         </div>
@@ -32,7 +32,7 @@ export default function HackathonsSection() {
                   <img
                     src={hackathon.image}
                     alt={hackathon.title}
-                    className="size-10 bg-card z-10 shrink-0 overflow-hidden p-1 border rounded-full shadow ring-2 ring-border object-contain flex-none"
+                    className="size-10 bg-card z-10 shrink-0 overflow-hidden p-1.5 border rounded-full shadow ring-2 ring-border object-contain flex-none"
                   />
                 ) : (
                   <div className="size-10 bg-card z-10 shrink-0 overflow-hidden p-2 border rounded-full shadow ring-2 ring-border flex items-center justify-center text-primary flex-none">

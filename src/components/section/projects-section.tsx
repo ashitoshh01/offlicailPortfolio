@@ -14,20 +14,20 @@ export default function ProjectsSection() {
                             className="flex-1 h-px bg-linear-to-r from-transparent from-5% via-border via-95% to-transparent"
                         />
                         <div className="border bg-primary z-10 rounded-xl px-4 py-1">
-                            <span className="text-background text-sm font-medium">Featured Projects</span>
+                            <span className="text-background text-sm font-medium">Projects</span>
                         </div>
                         <div
                             className="flex-1 h-px bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent"
                         />
                     </div>
-                    <div className="flex flex-col gap-y-3 items-center justify-center">
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Featured Engineering Work</h2>
+                    <div className="flex flex-col gap-y-3 items-center justify-center text-center">
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Featured Projects</h2>
                         <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center max-w-xl">
-                            A curated selection of systems I&apos;ve built — spanning applied computer vision, developer tooling, real-time campus platforms, and behavioral economics apps.
+                            A selection of full-stack applications, developer tools, and practical software products I&apos;ve built.
                         </p>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 max-w-[800px] mx-auto auto-rows-fr">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 w-full mx-auto auto-rows-fr">
                     {DATA.projects.map((project, id) => (
                         <BlurFade
                             key={project.title}
@@ -35,9 +35,12 @@ export default function ProjectsSection() {
                             className="h-full"
                         >
                             <ProjectCard
-                                href={project.href}
+                                href={project.liveUrl || project.href}
+                                liveUrl={project.liveUrl}
+                                githubUrl={project.githubUrl}
                                 key={project.title}
                                 title={project.title}
+                                subtitle={project.subtitle}
                                 description={project.description}
                                 dates={project.dates}
                                 tags={project.technologies}

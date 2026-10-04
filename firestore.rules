@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check if the authenticated user is the Admin
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email.lower() == 'ashu@gmail.com';
+    }
+    
+    // Blog Discussion Forum & Threaded Replies
+    match /blog_discussions/{commentId} {
+      // 1. Anyone (public or logged-in) can read comments and replies
+      allow read: if true;
+
+      // 2. Only authenticated users can post questions or replies
+      allow create: if request.auth != null
+        && request.resource.data.author.uid == request.auth.uid
+        && request.resource.data.postSlug is string
+        && request.resource.data.content is string
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 3000;
+
+      // 3. Authors can delete their own comments/replies, AND Admin (ashu@gmail.com) can delete ANY comment/reply
+      allow delete: if request.auth != null
+        && (resource.data.author.uid == request.auth.uid || isAdmin());
+
+      // 4. Authenticated users can toggle likes, author can edit, and Admin has full moderation rights
+      allow update: if request.auth != null
+        && (
+          // Allowing toggling likes
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
+          // Comment author updating
+          || resource.data.author.uid == request.auth.uid
+          // Admin updating/moderating
+          || isAdmin()
+        );
+    }
+
+  }
+}

@@ -104,6 +104,18 @@ export function useAuth(): AuthState {
       setLoading(true);
       try {
         const result = await signInWithEmailAndPassword(auth, email.trim(), password);
+        const lowerEmail = email.trim().toLowerCase();
+        if (
+          (lowerEmail === "ashu@gmail.com" || lowerEmail === "ashitoshlavhate2@gmail.com") &&
+          (!result.user.displayName ||
+            result.user.displayName === "Anonymous User" ||
+            result.user.displayName === "ashu")
+        ) {
+          await updateProfile(result.user, {
+            displayName: "Ashitosh Lavhate",
+            photoURL: result.user.photoURL || "/ashitosh.jpeg",
+          }).catch(() => {});
+        }
         setUser(result.user);
         return result.user;
       } catch (err: unknown) {

@@ -5,7 +5,10 @@ service cloud.firestore {
 
     // Helper function to check if the authenticated user is the Admin
     function isAdmin() {
-      return request.auth != null && request.auth.token.email.lower() == 'ashu@gmail.com';
+      return request.auth != null && (
+        request.auth.token.email.lower() == 'ashu@gmail.com' ||
+        request.auth.token.email.lower() == 'ashitoshlavhate2@gmail.com'
+      );
     }
     
     // Blog Discussion Forum & Threaded Replies

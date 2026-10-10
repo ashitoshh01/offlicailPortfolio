@@ -15,6 +15,7 @@ import {
   arrayRemove,
   Timestamp,
 } from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/use-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -104,12 +105,43 @@ function getInitials(name?: string): string {
   return name.slice(0, 2).toUpperCase();
 }
 
-const ADMIN_EMAIL = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "ashu@gmail.com").toLowerCase();
+const ADMIN_EMAILS = [
+  (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "ashu@gmail.com").toLowerCase(),
+  "ashu@gmail.com",
+  "ashitoshlavhate2@gmail.com",
+];
+
+export const isUserAdmin = (email?: string | null): boolean => {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.trim().toLowerCase());
+};
+
+function getCommentAuthorDisplay(
+  author: CommentAuthor,
+  isAdminAuthor: boolean
+): { displayName: string; photoURL?: string } {
+  const isAnonymous =
+    !author.name ||
+    author.name.trim() === "" ||
+    author.name.toLowerCase() === "anonymous user" ||
+    author.name.toLowerCase() === "anonymous" ||
+    author.name.toLowerCase() === "ashu";
+
+  const displayName = isAdminAuthor
+    ? (isAnonymous ? "Ashitosh Lavhate" : author.name)
+    : (author.name || "Anonymous User");
+
+  const photoURL =
+    author.photoURL ||
+    (isAdminAuthor ? (DATA.avatarUrl || "/ashitosh.jpeg") : undefined);
+
+  return { displayName, photoURL };
+}
 
 export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
   const { user, loading: authLoading, error: authError, signOut, clearError } = useAuth();
 
-  const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
+  const isAdmin = isUserAdmin(user?.email);
 
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentItem[]>([]);
@@ -205,6 +237,50 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
     };
   }, [comments]);
 
+  // Auto-sync admin Firebase Auth profile and patch any legacy comments
+  useEffect(() => {
+    if (!user || !isUserAdmin(user.email)) return;
+
+    if (
+      !user.displayName ||
+      user.displayName === "Anonymous User" ||
+      user.displayName === "ashu"
+    ) {
+      updateProfile(user, {
+        displayName: "Ashitosh Lavhate",
+        photoURL: user.photoURL || DATA.avatarUrl || "/ashitosh.jpeg",
+      }).catch((err) => console.error("Could not sync admin profile:", err));
+    }
+
+    // Automatically patch legacy comments authored by admin saved as Anonymous User
+    const patchLegacyAdminComments = async () => {
+      try {
+        const needsFixing = comments.filter(
+          (c) =>
+            isUserAdmin(c.author.email) &&
+            (c.author.name === "Anonymous User" ||
+              c.author.name === "Anonymous" ||
+              c.author.name === "ashu" ||
+              !c.author.name ||
+              !c.author.photoURL)
+        );
+
+        for (const item of needsFixing) {
+          await updateDoc(doc(db, "blog_discussions", item.id), {
+            "author.name": "Ashitosh Lavhate",
+            "author.photoURL": item.author.photoURL || DATA.avatarUrl || "/ashitosh.jpeg",
+          });
+        }
+      } catch (e) {
+        console.warn("Could not patch legacy comment document:", e);
+      }
+    };
+
+    if (comments.length > 0) {
+      patchLegacyAdminComments();
+    }
+  }, [user, comments]);
+
   // Post a top-level comment
   const handlePostRoot = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,19 +296,37 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
 
     try {
       const activeUser = user!;
+      const isAdminUser = isUserAdmin(activeUser.email);
+      const authorName = isAdminUser
+        ? "Ashitosh Lavhate"
+        : (activeUser.displayName?.trim() || activeUser.email?.split("@")[0] || "Anonymous User");
+      const authorPhoto = activeUser.photoURL || (isAdminUser ? (DATA.avatarUrl || "/ashitosh.jpeg") : "");
+
       await addDoc(collection(db, "blog_discussions"), {
         postSlug,
         parentId: null,
         content: rootInput.trim(),
         author: {
           uid: activeUser.uid,
-          name: activeUser.displayName || "Anonymous User",
+          name: authorName,
           email: activeUser.email || "",
-          photoURL: activeUser.photoURL || "",
+          photoURL: authorPhoto,
         },
         likes: [],
         createdAt: serverTimestamp(),
       });
+
+      if (
+        isAdminUser &&
+        (!activeUser.displayName ||
+          activeUser.displayName === "Anonymous User" ||
+          activeUser.displayName === "ashu")
+      ) {
+        updateProfile(activeUser, {
+          displayName: "Ashitosh Lavhate",
+          photoURL: activeUser.photoURL || DATA.avatarUrl || "/ashitosh.jpeg",
+        }).catch((err) => console.error("Could not sync admin profile:", err));
+      }
 
       setRootInput("");
     } catch (err: unknown) {
@@ -257,19 +351,37 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
 
     try {
       const activeUser = user!;
+      const isAdminUser = isUserAdmin(activeUser.email);
+      const authorName = isAdminUser
+        ? "Ashitosh Lavhate"
+        : (activeUser.displayName?.trim() || activeUser.email?.split("@")[0] || "Anonymous User");
+      const authorPhoto = activeUser.photoURL || (isAdminUser ? (DATA.avatarUrl || "/ashitosh.jpeg") : "");
+
       await addDoc(collection(db, "blog_discussions"), {
         postSlug,
         parentId,
         content: replyInput.trim(),
         author: {
           uid: activeUser.uid,
-          name: activeUser.displayName || "Anonymous User",
+          name: authorName,
           email: activeUser.email || "",
-          photoURL: activeUser.photoURL || "",
+          photoURL: authorPhoto,
         },
         likes: [],
         createdAt: serverTimestamp(),
       });
+
+      if (
+        isAdminUser &&
+        (!activeUser.displayName ||
+          activeUser.displayName === "Anonymous User" ||
+          activeUser.displayName === "ashu")
+      ) {
+        updateProfile(activeUser, {
+          displayName: "Ashitosh Lavhate",
+          photoURL: activeUser.photoURL || DATA.avatarUrl || "/ashitosh.jpeg",
+        }).catch((err) => console.error("Could not sync admin profile:", err));
+      }
 
       setReplyInput("");
       setReplyingToId(null);
@@ -362,14 +474,19 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
           ) : user ? (
             <div className="flex items-center gap-2.5 p-1 pl-2 pr-1.5 rounded-full border border-border/70 bg-card/60 shadow-xs">
               <Avatar className="size-6 ring-1 ring-border">
-                {user.photoURL && <AvatarImage src={user.photoURL} alt={user.displayName || "User"} />}
+                {(user.photoURL || (isAdmin ? (DATA.avatarUrl || "/ashitosh.jpeg") : null)) && (
+                  <AvatarImage
+                    src={user.photoURL || (isAdmin ? (DATA.avatarUrl || "/ashitosh.jpeg") : undefined)}
+                    alt={isAdmin ? "Ashitosh Lavhate" : (user.displayName || "User")}
+                  />
+                )}
                 <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">
-                  {getInitials(user.displayName || user.email || "")}
+                  {getInitials(isAdmin ? "Ashitosh Lavhate" : (user.displayName || user.email || ""))}
                 </AvatarFallback>
               </Avatar>
               <div className="flex items-center gap-1.5 max-w-[110px] sm:max-w-[170px]">
                 <span className="text-xs font-medium text-foreground truncate">
-                  {user.displayName || user.email?.split("@")[0]}
+                  {isAdmin ? "Ashitosh Lavhate" : (user.displayName || user.email?.split("@")[0])}
                 </span>
                 {isAdmin && (
                   <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/15 text-amber-500 border border-amber-500/30 shrink-0">
@@ -427,9 +544,16 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
         <form onSubmit={handlePostRoot} className="space-y-3">
           <div className="flex items-start gap-3">
             <Avatar className="size-8 sm:size-9 ring-1 ring-border/80 shrink-0 mt-0.5">
-              {user?.photoURL && <AvatarImage src={user.photoURL} alt={user.displayName || "User"} />}
+              {(user?.photoURL || (isAdmin ? (DATA.avatarUrl || "/ashitosh.jpeg") : null)) && (
+                <AvatarImage
+                  src={user?.photoURL || (isAdmin ? (DATA.avatarUrl || "/ashitosh.jpeg") : undefined)}
+                  alt={isAdmin ? "Ashitosh Lavhate" : (user?.displayName || "User")}
+                />
+              )}
               <AvatarFallback className="text-xs font-semibold bg-muted text-muted-foreground">
-                {user ? getInitials(user.displayName || user.email || "") : "U"}
+                {user
+                  ? getInitials(isAdmin ? "Ashitosh Lavhate" : (user.displayName || user.email || ""))
+                  : "U"}
               </AvatarFallback>
             </Avatar>
 
@@ -539,7 +663,8 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
             const likeCount = comment.likes?.length || 0;
             const isAuthor = user?.uid === comment.author.uid;
             const canDelete = isAuthor || isAdmin;
-            const isCommentAdmin = (comment.author.email || "").toLowerCase() === ADMIN_EMAIL;
+            const isCommentAdmin = isUserAdmin(comment.author.email);
+            const commentAuthorDisplay = getCommentAuthorDisplay(comment.author, isCommentAdmin);
 
             return (
               <div
@@ -550,17 +675,17 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2.5">
                     <Avatar className="size-8 sm:size-9 ring-1 ring-border shrink-0">
-                      {comment.author.photoURL && (
-                        <AvatarImage src={comment.author.photoURL} alt={comment.author.name} />
+                      {commentAuthorDisplay.photoURL && (
+                        <AvatarImage src={commentAuthorDisplay.photoURL} alt={commentAuthorDisplay.displayName} />
                       )}
                       <AvatarFallback className="text-xs font-semibold bg-muted text-muted-foreground">
-                        {getInitials(comment.author.name)}
+                        {getInitials(commentAuthorDisplay.displayName)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="text-sm font-semibold text-foreground leading-tight">
-                          {comment.author.name}
+                          {commentAuthorDisplay.displayName}
                         </span>
                         {isCommentAdmin ? (
                           <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/30">
@@ -655,7 +780,7 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
                     <div className="flex items-center justify-between pb-1.5 text-xs text-muted-foreground">
                       <span className="font-medium text-foreground flex items-center gap-1">
                         <CornerDownRight className="size-3 text-primary" />
-                        Replying to <span className="font-semibold">{comment.author.name}</span>
+                        Replying to <span className="font-semibold">{commentAuthorDisplay.displayName}</span>
                       </span>
                       <button
                         onClick={() => {
@@ -721,7 +846,8 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
                       const replyLikeCount = reply.likes?.length || 0;
                       const isReplyAuthor = user?.uid === reply.author.uid;
                       const canDeleteReply = isReplyAuthor || isAdmin;
-                      const isReplyAdmin = (reply.author.email || "").toLowerCase() === ADMIN_EMAIL;
+                      const isReplyAdmin = isUserAdmin(reply.author.email);
+                      const replyAuthorDisplay = getCommentAuthorDisplay(reply.author, isReplyAdmin);
 
                       return (
                         <div
@@ -731,20 +857,20 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex items-center gap-2">
                               <Avatar className="size-6 sm:size-7 ring-1 ring-border shrink-0">
-                                {reply.author.photoURL && (
+                                {replyAuthorDisplay.photoURL && (
                                   <AvatarImage
-                                    src={reply.author.photoURL}
-                                    alt={reply.author.name}
+                                    src={replyAuthorDisplay.photoURL}
+                                    alt={replyAuthorDisplay.displayName}
                                   />
                                 )}
                                 <AvatarFallback className="text-[10px] font-semibold bg-muted text-muted-foreground">
-                                  {getInitials(reply.author.name)}
+                                  {getInitials(replyAuthorDisplay.displayName)}
                                 </AvatarFallback>
                               </Avatar>
                               <div>
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                   <span className="text-xs sm:text-sm font-semibold text-foreground leading-tight">
-                                    {reply.author.name}
+                                    {replyAuthorDisplay.displayName}
                                   </span>
                                   {isReplyAdmin ? (
                                     <span className="inline-flex items-center gap-0.5 px-1 py-0.1 rounded text-[9px] font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/30">

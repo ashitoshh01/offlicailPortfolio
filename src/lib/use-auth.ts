@@ -64,6 +64,8 @@ export function useAuth(): AuthState {
         setError(null);
       } else if (authErr.code === "auth/popup-blocked") {
         setError("Pop-up was blocked by your browser. Please allow pop-ups for this site to sign in.");
+      } else if (authErr.code === "auth/unauthorized-domain") {
+        setError("This domain is not authorized for OAuth yet. Please add your domain to Firebase Console -> Authentication -> Settings -> Authorized domains.");
       } else if (authErr.code === "auth/network-request-failed") {
         setError("Network error. Please check your internet connection.");
       } else {
@@ -89,6 +91,8 @@ export function useAuth(): AuthState {
         setError(null);
       } else if (authErr.code === "auth/popup-blocked") {
         setError("Pop-up was blocked by your browser. Please allow pop-ups for this site to sign in.");
+      } else if (authErr.code === "auth/unauthorized-domain") {
+        setError("This domain is not authorized for OAuth yet. Please add your domain to Firebase Console -> Authentication -> Settings -> Authorized domains.");
       } else {
         setError("Unable to complete sign-in right now. Please try again.");
       }

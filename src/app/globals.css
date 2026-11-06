@@ -234,3 +234,14 @@
   }
 
 }
+
+@media (max-width: 899.98px) {
+  [data-dock-icon] {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+  [data-dock-icon-inner] {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+}

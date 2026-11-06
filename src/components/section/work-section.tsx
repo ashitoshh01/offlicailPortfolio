@@ -32,7 +32,7 @@ export default function WorkSection() {
     <div className="w-full grid gap-6">
       {DATA.work.map((work) => {
         const dateDisplay =
-          work.start === work.end
+          (work.start as string) === (work.end as string | undefined)
             ? work.start
             : `${work.start} - ${work.end ?? "Present"}`;
 

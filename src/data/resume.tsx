@@ -177,8 +177,8 @@ export const DATA = {
       location: "Pune, India",
       title: "Google Student Ambassador",
       logoUrl: "/companies/gemini.png",
-      start: "2026",
-      end: "2026",
+      start: "June 2026",
+      end: "September 2026",
       description:
         "Selected as a Google Student Ambassador, organizing technical workshops, hackathons, and student developer activities while promoting practical AI adoption on campus.",
     },

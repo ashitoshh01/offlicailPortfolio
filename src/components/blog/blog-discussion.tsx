@@ -148,6 +148,14 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
   const [loadingComments, setLoadingComments] = useState<boolean>(true);
   const [dbError, setDbError] = useState<string | null>(null);
 
+  // Adjust state during render if postSlug changes (official React pattern)
+  const [prevSlug, setPrevSlug] = useState(postSlug);
+  if (prevSlug !== postSlug) {
+    setPrevSlug(postSlug);
+    setLoadingComments(true);
+    setDbError(null);
+  }
+
   // New root comment input
   const [rootInput, setRootInput] = useState<string>("");
   const [submittingRoot, setSubmittingRoot] = useState<boolean>(false);
@@ -171,9 +179,6 @@ export function BlogDiscussion({ postSlug, postTitle }: BlogDiscussionProps) {
 
   // Real-time listener for this post's comments
   useEffect(() => {
-    setLoadingComments(true);
-    setDbError(null);
-
     const commentsRef = collection(db, "blog_discussions");
     const q = query(commentsRef, where("postSlug", "==", postSlug));
 

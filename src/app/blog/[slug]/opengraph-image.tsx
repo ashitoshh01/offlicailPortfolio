@@ -3,8 +3,8 @@
 import { ImageResponse } from "next/og";
 import { allPosts } from "content-collections";
 import { DATA } from "@/data/resume";
-
-export const runtime = "edge";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 export const alt = "Blog Post";
 export const size = {
@@ -16,18 +16,8 @@ export const contentType = "image/png";
 const getFontData = async () => {
     try {
         const [cabinetGrotesk, clashDisplay] = await Promise.all([
-            fetch(
-                new URL(
-                    "../../../../public/fonts/CabinetGrotesk-Medium.ttf",
-                    import.meta.url
-                )
-            ).then((res) => res.arrayBuffer()),
-            fetch(
-                new URL(
-                    "../../../../public/fonts/ClashDisplay-Semibold.ttf",
-                    import.meta.url
-                )
-            ).then((res) => res.arrayBuffer()),
+            fs.readFile(path.join(process.cwd(), "public/fonts/CabinetGrotesk-Medium.ttf")),
+            fs.readFile(path.join(process.cwd(), "public/fonts/ClashDisplay-Semibold.ttf")),
         ]);
         return { cabinetGrotesk, clashDisplay };
     } catch (error) {
@@ -71,7 +61,6 @@ const styles = {
         left: "40px",
         display: "flex",
         alignItems: "center",
-        zIndex: "2",
     },
     mainContainer: {
         display: "flex",
@@ -81,7 +70,6 @@ const styles = {
         height: "100%",
         width: "100%",
         position: "relative",
-        zIndex: "1",
     },
     image: {
         width: "140px",

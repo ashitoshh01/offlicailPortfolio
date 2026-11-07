@@ -60,5 +60,13 @@
     "remark-mdx-frontmatter": "^6.0.0",
     "uuid": "^11.1.1",
     "zod": "^4.6.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@firebase/util",
+      "esbuild",
+      "protobufjs",
+      "unrs-resolver"
+    ]
   }
 }

@@ -115,7 +115,7 @@ export const DATA = {
     { href: "/blog", icon: NotebookIcon, label: "Blog" },
   ],
   contact: {
-    email: "ashitoshlavhate2@gmail.com",
+    email: "lavhateashitosh01@gmail.com",
     tel: "+91 9518352166",
     social: {
       GitHub: {
@@ -147,7 +147,7 @@ export const DATA = {
         "Built and deployed a full-stack legal platform with 30,000+ lawyer profiles, search, lawyer dashboards, chat, and social features. Integrated a RAG-based support chatbot and deployed the Next.js, Django, and PostgreSQL platform to production.",
     },
     {
-      company: "Erfinden — BarterX",
+      company: "Erfinden",
       href: "#",
       badges: [],
       location: "Remote / Pune, India",
@@ -172,6 +172,7 @@ export const DATA = {
     },
     {
       company: "Google Student Ambassador — Gemini",
+      companyShort: "GSA",
       href: "https://developers.google.com",
       badges: [],
       location: "Pune, India",
@@ -235,7 +236,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/reachfirst.png",
+      image: "/projects/reachfirst.webp",
       video: "",
     },
     {
@@ -263,7 +264,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/flowlens.png",
+      image: "/projects/flowlens.webp",
       video: "",
     },
     {
@@ -290,7 +291,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/doordue.png",
+      image: "/projects/doordue.webp",
       video: "",
     },
     {
@@ -318,7 +319,7 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "/projects/ai-inspection.png",
+      image: "/projects/ai-inspection.webp",
       video: "",
     },
   ],
@@ -334,12 +335,22 @@ export const DATA = {
       links: [],
     },
     {
+      title: "IND-VNP Dataset — IEEE DataPort",
+      dates: "2026",
+      location: "IEEE DataPort",
+      win: "Published Dataset",
+      description:
+        "Published an Indian Vehicle and Number Plate Image Dataset containing 28,864 images, including raw and Gaussian-blurred samples, to support computer vision research and object detection model development.",
+      image: "/hackathons/ieee-dataport.png",
+      links: [],
+    },
+    {
       title: "Ignitia — MIT-WPU",
       dates: "2026",
       location: "MIT-WPU, Pune",
       win: "4th Place",
       description:
-        "Ranked 4th in a competitive AI hackathon and presented the solution to the organizing panel.",
+        "Secured 4th place among 78+ finalist teams in a rigorous 24-hour hackathon, designing and demonstrating an end-to-end prototype to an expert evaluation panel.",
       image: "/hackathons/mit.png",
       links: [],
     },
@@ -349,7 +360,7 @@ export const DATA = {
       location: "IMCC, Pune",
       win: "5th Place",
       description:
-        "Placed 5th in the hackathon for developing and presenting a technical solution.",
+        "Ranked 5th overall among 280+ participating teams in an intensive 24-hour hackathon, conceptualizing, building, and presenting a functional solution under tight time constraints.",
       image: "/hackathons/imcc.png",
       links: [],
     },
@@ -359,7 +370,7 @@ export const DATA = {
       location: "Pune, India",
       win: "2nd Runner-Up",
       description:
-        "Recognized for rapid prototyping and collaborative problem solving.",
+        "Awarded 2nd Runner-Up in an IEEE-organized ideathon, recognized for a structured problem-solving approach, technical feasibility, and pitch delivery.",
       image: "/hackathons/ieee.png",
       links: [],
     },

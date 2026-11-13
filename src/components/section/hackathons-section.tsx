@@ -35,6 +35,7 @@ export default function HackathonsSection() {
                     width={40}
                     height={40}
                     loading="lazy"
+                    decoding="async"
                     className="size-10 bg-card z-10 shrink-0 overflow-hidden p-1.5 border rounded-full shadow ring-2 ring-border object-contain flex-none"
                   />
                 ) : (

@@ -22,6 +22,7 @@ function ProjectImage({ src, alt }: { src: string; alt: string }) {
       width={600}
       height={300}
       loading="lazy"
+      decoding="async"
       className="w-full h-48 object-cover"
       onError={() => setImageError(true)}
     />

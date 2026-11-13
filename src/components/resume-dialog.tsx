@@ -159,8 +159,10 @@ export function ResumeDialog({
                   </div>
                   <div className="bg-white rounded-lg shadow-md border border-neutral-200 overflow-hidden">
                     <img
-                      src="/resume-page-1.png"
+                      src="/resume-page-1.webp"
                       alt="Ashitosh Lavhate Resume - Page 1"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-auto block select-none"
                     />
                   </div>
@@ -178,8 +180,10 @@ export function ResumeDialog({
                   </div>
                   <div className="bg-white rounded-lg shadow-md border border-neutral-200 overflow-hidden">
                     <img
-                      src="/resume-page-2.png"
+                      src="/resume-page-2.webp"
                       alt="Ashitosh Lavhate Resume - Page 2"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-auto block select-none"
                     />
                   </div>

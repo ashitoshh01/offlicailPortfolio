@@ -3,6 +3,29 @@
 import { useState } from "react";
 import { DATA } from "@/data/resume";
 
+const MONTH_MAP: Record<string, string> = {
+  January: "Jan",
+  February: "Feb",
+  March: "Mar",
+  April: "Apr",
+  May: "May",
+  June: "Jun",
+  July: "Jul",
+  August: "Aug",
+  September: "Sep",
+  October: "Oct",
+  November: "Nov",
+  December: "Dec",
+};
+
+function formatShortDate(dateStr?: string) {
+  if (!dateStr) return "";
+  return dateStr.replace(
+    /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/g,
+    (match) => MONTH_MAP[match] || match
+  );
+}
+
 function LogoImage({ src, alt }: { src: string; alt: string }) {
   const [imageError, setImageError] = useState(false);
 
@@ -21,6 +44,7 @@ function LogoImage({ src, alt }: { src: string; alt: string }) {
       width={40}
       height={40}
       loading="lazy"
+      decoding="async"
       className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none bg-white"
       onError={() => setImageError(true)}
     />
@@ -31,10 +55,23 @@ export default function WorkSection() {
   return (
     <div className="w-full grid gap-6">
       {DATA.work.map((work) => {
-        const dateDisplay =
-          (work.start as string) === (work.end as string | undefined)
-            ? work.start
-            : `${work.start} - ${work.end ?? "Present"}`;
+        const isSameStartEnd =
+          (work.start as string) === (work.end as string | undefined);
+        const dateDisplay = isSameStartEnd
+          ? work.start
+          : `${work.start} - ${work.end ?? "Present"}`;
+
+        const shortStart = formatShortDate(work.start as string);
+        const shortEnd = work.end
+          ? formatShortDate(work.end as string)
+          : "Present";
+        const shortDateDisplay = isSameStartEnd
+          ? shortStart
+          : `${shortStart} - ${shortEnd}`;
+
+        const companyShort =
+          ("companyShort" in work && (work.companyShort as string)) ||
+          (work.company.includes("Google Student Ambassador") ? "GSA" : null);
 
         return (
           <div key={work.company} className="w-full grid gap-2">
@@ -43,7 +80,14 @@ export default function WorkSection() {
                 <LogoImage src={work.logoUrl} alt={work.company} />
                 <div className="flex-1 min-w-0 gap-0.5 flex flex-col">
                   <h3 className="font-semibold leading-none flex items-center gap-2 text-base">
-                    {work.company}
+                    {companyShort ? (
+                      <>
+                        <span className="sm:hidden">{companyShort}</span>
+                        <span className="hidden sm:inline">{work.company}</span>
+                      </>
+                    ) : (
+                      work.company
+                    )}
                   </h3>
                   <div className="font-sans text-sm text-muted-foreground">
                     {work.title}
@@ -51,7 +95,8 @@ export default function WorkSection() {
                 </div>
               </div>
               <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none">
-                <span>{dateDisplay}</span>
+                <span className="sm:hidden">{shortDateDisplay}</span>
+                <span className="hidden sm:inline">{dateDisplay}</span>
               </div>
             </div>
             {work.description && (

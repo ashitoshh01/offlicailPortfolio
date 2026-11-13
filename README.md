@@ -8,7 +8,7 @@ Built with Next.js, [shadcn/ui](https://ui.shadcn.com/), TailwindCSS, and [Magic
 
 - **Personal Profile & Hero:** Highlights full-stack applications, backend systems, developer tools, and applied AI products.
 - **Categorized Skills:** Cleanly organized technical stack (Languages, Frontend, Backend, Databases, Tools, AI / ML).
-- **Interactive Work Experience:** Accordion timeline of engineering roles (Tech Lead at E-Vakili, Full Stack Developer Intern at Erfinden — BarterX, Backend Developer Intern at Admatix, Google Student Ambassador — Gemini).
+- **Interactive Work Experience:** Accordion timeline of engineering roles (Tech Lead at E-Vakili, Full Stack Developer Intern at Erfinden, Backend Developer Intern at Admatix, Google Student Ambassador — Gemini).
 - **Featured Projects:** Showcasing ReachFirst, FlowLens, DoOrDue, and AI Visual Inspection SaaS.
 - **Achievements & Leadership:** Documenting Google Student Ambassador — Gemini and national hackathon recognitions.
 - **Integrated Blog:** Dynamic MDX-powered technical blog.

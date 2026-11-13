@@ -87,52 +87,60 @@ export default function Page() {
             {DATA.education.map((education, index) => {
               const hasLink = Boolean(education.href && education.href.length > 0);
               const content = (
-                <>
-                  <div className="flex items-start gap-x-3 flex-1 min-w-0">
-                    {education.logoUrl ? (
-                      <img
-                        src={education.logoUrl}
-                        alt={`${education.school} logo`}
-                        width={40}
-                        height={40}
-                        loading="lazy"
-                        className="size-8 md:size-10 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
-                      />
-                    ) : (
-                      <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none flex items-center justify-center font-bold text-xs text-muted-foreground uppercase select-none">
-                        {(education as { school: string }).school
-                          .split(" ")
-                          .map((w: string) => w[0])
-                          .slice(0, 3)
-                          .join("")}
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                      <div className="font-semibold leading-none flex items-center gap-2">
-                        {education.school}
-                        {hasLink && (
-                          <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
+                <div className="w-full flex flex-col gap-y-1">
+                  <div className="flex items-start gap-x-3 justify-between w-full">
+                    <div className="flex items-start gap-x-3 flex-1 min-w-0">
+                      {education.logoUrl ? (
+                        <img
+                          src={education.logoUrl}
+                          alt={`${education.school} logo`}
+                          width={40}
+                          height={40}
+                          loading="lazy"
+                          decoding="async"
+                          className="size-8 md:size-10 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
+                        />
+                      ) : (
+                        <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none flex items-center justify-center font-bold text-xs text-muted-foreground uppercase select-none">
+                          {(education as { school: string }).school
+                            .split(" ")
+                            .map((w: string) => w[0])
+                            .slice(0, 3)
+                            .join("")}
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                        <div className="font-semibold leading-none flex items-center gap-2">
+                          {education.school}
+                          {hasLink && (
+                            <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
+                          )}
+                        </div>
+                        <div className="font-sans text-sm text-muted-foreground">
+                          {education.degree}
+                        </div>
+                        {"cgpa" in education && education.cgpa && (
+                          <div className="text-xs text-muted-foreground/80 font-medium">
+                            {education.cgpa}
+                          </div>
+                        )}
+                        {"reflection" in education && education.reflection && (
+                          <div className="hidden min-[560px]:block text-xs text-muted-foreground/75 italic pt-0.5">
+                            &ldquo;{education.reflection}&rdquo;
+                          </div>
                         )}
                       </div>
-                      <div className="font-sans text-sm text-muted-foreground">
-                        {education.degree}
-                      </div>
-                      {"cgpa" in education && education.cgpa && (
-                        <div className="text-xs text-muted-foreground/80 font-medium">
-                          {education.cgpa}
-                        </div>
-                      )}
-                      {"reflection" in education && education.reflection && (
-                        <div className="text-xs text-muted-foreground/75 italic pt-0.5">
-                          &ldquo;{education.reflection}&rdquo;
-                        </div>
-                      )}
+                    </div>
+                    <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none pt-0.5">
+                      <span>{education.period}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none pt-0.5">
-                    <span>{education.period}</span>
-                  </div>
-                </>
+                  {"reflection" in education && education.reflection && (
+                    <div className="min-[560px]:hidden ml-11 text-xs text-muted-foreground/75 italic pt-0.5 leading-relaxed">
+                      &ldquo;{education.reflection}&rdquo;
+                    </div>
+                  )}
+                </div>
               );
 
               return (
@@ -146,12 +154,12 @@ export default function Page() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Visit ${education.school} website`}
-                      className="flex items-start gap-x-3 justify-between group"
+                      className="block group"
                     >
                       {content}
                     </Link>
                   ) : (
-                    <div className="flex items-start gap-x-3 justify-between">
+                    <div className="block">
                       {content}
                     </div>
                   )}

@@ -108,7 +108,7 @@ function getInitials(name?: string): string {
 const ADMIN_EMAILS = [
   (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "ashu@gmail.com").toLowerCase(),
   "ashu@gmail.com",
-  "ashitoshlavhate2@gmail.com",
+  "lavhateashitosh01@gmail.com",
 ];
 
 export const isUserAdmin = (email?: string | null): boolean => {

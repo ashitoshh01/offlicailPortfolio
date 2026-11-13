@@ -110,7 +110,7 @@ export function useAuth(): AuthState {
         const result = await signInWithEmailAndPassword(auth, email.trim(), password);
         const lowerEmail = email.trim().toLowerCase();
         if (
-          (lowerEmail === "ashu@gmail.com" || lowerEmail === "ashitoshlavhate2@gmail.com") &&
+          (lowerEmail === "ashu@gmail.com" || lowerEmail === "lavhateashitosh01@gmail.com") &&
           (!result.user.displayName ||
             result.user.displayName === "Anonymous User" ||
             result.user.displayName === "ashu")

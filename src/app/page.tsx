@@ -116,30 +116,42 @@ export default function Page() {
                             <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
                           )}
                         </div>
-                        <div className="font-sans text-sm text-muted-foreground">
-                          {education.degree}
+                        <div className="hidden min-[560px]:flex flex-col gap-0.5">
+                          <div className="font-sans text-sm text-muted-foreground">
+                            {education.degree}
+                          </div>
+                          {"cgpa" in education && education.cgpa && (
+                            <div className="text-xs text-muted-foreground/80 font-medium">
+                              {education.cgpa}
+                            </div>
+                          )}
+                          {"reflection" in education && education.reflection && (
+                            <div className="text-xs text-muted-foreground/75 italic pt-0.5">
+                              &ldquo;{education.reflection}&rdquo;
+                            </div>
+                          )}
                         </div>
-                        {"cgpa" in education && education.cgpa && (
-                          <div className="text-xs text-muted-foreground/80 font-medium">
-                            {education.cgpa}
-                          </div>
-                        )}
-                        {"reflection" in education && education.reflection && (
-                          <div className="hidden min-[560px]:block text-xs text-muted-foreground/75 italic pt-0.5">
-                            &ldquo;{education.reflection}&rdquo;
-                          </div>
-                        )}
                       </div>
                     </div>
                     <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none pt-0.5">
                       <span>{education.period}</span>
                     </div>
                   </div>
-                  {"reflection" in education && education.reflection && (
-                    <div className="min-[560px]:hidden ml-11 text-xs text-muted-foreground/75 italic pt-0.5 leading-relaxed">
-                      &ldquo;{education.reflection}&rdquo;
+                  <div className="min-[560px]:hidden ml-11 flex flex-col gap-0.5 pt-0.5">
+                    <div className="font-sans text-sm text-muted-foreground">
+                      {education.degree}
                     </div>
-                  )}
+                    {"cgpa" in education && education.cgpa && (
+                      <div className="text-xs text-muted-foreground/80 font-medium">
+                        {education.cgpa}
+                      </div>
+                    )}
+                    {"reflection" in education && education.reflection && (
+                      <div className="text-xs text-muted-foreground/75 italic pt-0.5 leading-relaxed">
+                        &ldquo;{education.reflection}&rdquo;
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
 

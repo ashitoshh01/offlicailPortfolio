@@ -56,3 +56,9 @@ next-env.d.ts
 .idea/
 *.swp
 *.swo
+
+# private notes, agent rules & internal configs
+AGENTS.md
+FIRESTORE_RULES.md
+firestore.rules
+/google4e244e8becd0e9c7.html
